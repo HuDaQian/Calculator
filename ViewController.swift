@@ -44,7 +44,7 @@ class ViewController: UIViewController {
             enter()
         }
     }
-    private func performOpeatrion(operation:Double -> Double) {
+    private func performOpeatrion(operation:(Double) -> Double) {
         if operandStack.count >= 1 {
             displayValue = operation(operandStack.removeLast())
             enter()
@@ -85,7 +85,7 @@ class ViewController: UIViewController {
             return NSDecimalNumber(string:display.text!).doubleValue
         }
         set {
-            display.text = "\(NSDecimalNumber(double:newValue))"
+            display.text = "\(NSDecimalNumber(string:"\(newValue)"))"
             userIsInTheMiddleOfTypingANumber = false
         }
     }
