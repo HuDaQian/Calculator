@@ -23,19 +23,10 @@ class ViewController: UIViewController {
     }
     
     @IBAction func operate(sender: UIButton) {
-        let operation = sender.currentTitle!
-        if userIsInTheMiddleOfTypingANumber {
-            enter()
-        }
-        switch operation {
-        case "+":performOpeatrion(){$0 + $1}
-        case "−":performOpeatrion(){$1 - $0}
-        case "×":performOpeatrion(){$0 * $1}
-        case "÷":performOpeatrion(){$1 / $0}
-        case "√":performOpeatrion(){sqrt($0)}
-        default:
-            break
-        }
+        operandStack.append(displayValue)
+        print("\(operandStack)")
+        currentOperation = sender.currentTitle!
+        userIsInTheMiddleOfTypingANumber = false
     }
     
     func performOpeatrion(operation:(Double,Double)->Double) {
@@ -72,16 +63,30 @@ class ViewController: UIViewController {
     }
     
     @IBAction func enter() {
+        if userIsInTheMiddleOfTypingANumber {
+            operandStack.append(displayValue)
+            print("\(operandStack)")
+        }
+        let operation = currentOperation
+        currentOperation = " "
+        switch operation {
+        case "+":performOpeatrion(){$0 + $1}
+        case "−":performOpeatrion(){$1 - $0}
+        case "×":performOpeatrion(){$0 * $1}
+        case "÷":performOpeatrion(){$1 / $0}
+        case "√":performOpeatrion(){sqrt($0)}
+        default:
+            break
+        }
         userIsInTheMiddleOfTypingANumber = false
-        operandStack.append(displayValue)
-        print("operandStack-->'\(operandStack)'")
     }
+    
+    
+
+    var currentOperation:String = " "
+    
     var displayValue:Double {
         get {
-//            print(display.text!)
-//            print("\(NSNumberFormatter().numberFromString(display.text!))")
-//            print("\(NSDecimalNumber(string: display.text!).intValue)")
-//            print("\(NSNumberFormatter().numberFromString(display.text!)!.doubleValue)")
             return NSDecimalNumber(string:display.text!).doubleValue
         }
         set {
@@ -94,6 +99,7 @@ class ViewController: UIViewController {
     }
     @IBAction func clear() {
         memoryClear()
+        currentOperation = " "
         displayValue = 0
         display.text = "0"
     }
